@@ -40,16 +40,26 @@ else:
 
 continue_input = True
 
+#name_list = []
 while continue_input:
+    ignore = False
     name_toAdd = input('Please input a name to add: ')
-    if name_toAdd not in df_original.Name.values:
+    if name_toAdd in df_original.Name.values:
+        print('\n Name: %s is in original csv.' % name_toAdd)
+        ignore = True
+    if name_toAdd in dict_toAdd['Name']:
+        print('\n Name: %s has already been added in this session.' % name_toAdd)
+        ignore = True
+    if ignore: 
+        print('Input ignored\n')
+        continue
+    else:
         print('Name: %s is not in file' % name_toAdd)
         dict_toAdd['Name'].append(name_toAdd)
         year_formed = int(input('Please enter and integer for the year formed: '))
         dict_toAdd['Year Formed'].append(year_formed)
-        #print(dict_toAdd)
-    else:
-        print('Name: %s already in file.\n' % name_toAdd)
+        
+        
     flag = input('Enter more information? --type N to exit--')
     if flag == 'N':
         continue_input = False
@@ -59,7 +69,6 @@ df_toAdd = pd.DataFrame(dict_toAdd)
 print('\nDataFrame to add to original file \n ---------------------------------- \n %s \n' % df_toAdd)
 ret = pd.concat([df_original, df_toAdd])
 ret['Year Formed'] = ret['Year Formed'].astype(int)
-
 
 #print('\nFinal DataFrame \n ---------------------------------- \n %s \n\n' % ret)
 csv_data = ret.to_csv(path, index=False)
