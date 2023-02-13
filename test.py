@@ -11,7 +11,9 @@ import pandas as pd
 #potential global filter for numpy type disagreements between python and numpy/pandas
 #warnings.simplefilter(action='ignore', category=FutureWarning)
 
-path = 'list.csv'
+path1 = 'csv_names.csv'
+path2 = 'csv_albums.csv'
+path3 = 'csv_genres.csv'
 
 if os.path.exists(path):
     csv_exists = True
@@ -19,7 +21,7 @@ else:
     csv_exists = False
 
 parser = argparse.ArgumentParser(description='build and alter database')
-parser.add_argument('-a', '--add', action='store_true', help='add values to csv file')
+parser.add_argument('-a', '--add', action='store_true', help='add values to name_csv file')
 parser.add_argument('-v', '--view', action='store_true', help='view dataframes during execution')
 parser.add_argument('-d', '--delete', action='store_true', help='delete saved csv file')
 args = parser.parse_args()
@@ -27,7 +29,7 @@ args = parser.parse_args()
 if args.delete == True:
     if csv_exists:
         print('Deleting previous CSV file')
-        os.remove(path)
+        os.remove(path1)
         csv_exists = False
     else:
         print('Can\'t delete file that does not exist, exiting')
@@ -36,7 +38,7 @@ if args.delete == True:
 if args.add == True:
     dict_toAdd = {'Name': [], 'Year Formed':[]}
     if csv_exists:
-        df_original = pd.read_csv(path)
+        df_original = pd.read_csv(path1)
         if args.view == True:
             print('Prior CSV loaded \n---------------------------- \n %s' % df_original)
     else:
@@ -78,4 +80,4 @@ if args.add == True:
     if args.view == True:
             print('Final CSV- indexing may be incorrect\n---------------------------- \n %s' % ret)
 
-    csv_data = ret.to_csv(path, index=False)
+    csv_data = ret.to_csv(path1, index=False)
